@@ -1,0 +1,33 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+library(tidyverse)
+library(geofacet)
+library(ggthemes)
+library(RColorBrewer)
+```
+
+```{r}
+cdc_mortality <- read.csv(here::here("/cdc_mortality.csv"))
+```
+
+
+```{r}
+ggplot(cdc_mortality, aes(year, age_adjusted_rate)) +
+  geom_line(aes(color = age_adjusted_rate)) +
+  scale_colour_brewer(palette = "Reds") +
+  facet_geo(~ state, grid = "us_state_grid2", label = "name") +
+  scale_x_continuous(labels = function(x) paste0("'", substr(x, 3, 4))) +
+  labs(title = "Age Adjusted Suicide Rate by State 1999-2016",
+    caption = "Data Source: Centers for Disease Control and Prevention, National Center for Health Statistics.",
+    x = "Year",
+    y = "Age Adjusted Suicide Rate (per 100,000)") +
+  theme(strip.text.x = element_text(size = 6)) + 
+  theme_fivethirtyeight()
+```
+
